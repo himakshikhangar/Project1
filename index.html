@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="shell">
+<nav class="sidebar" aria-label="Main navigation">
+<div class="logo-wrap">
+<div class="cube" aria-hidden="true">
+<div class="face face-front"></div>
+<div class="face face-back"></div>
+<div class="face face-right"></div>
+<div class="face face-left"></div>
+<div class="face face-top"></div>
+<div class="face face-bottom"></div>
+</div>
+<span class="brand">Campus Desk</span>
+</div>
+<ul class="nav-list">
+<li><a href="#overview" class="nav-link" data-view="overview"><span class="nav-label">Overview</span></a></li>
+<li><a href="#timetable" class="nav-link" data-view="timetable"><span class="nav-label">Timetable</span></a></li>
+<li><a href="#attendance" class="nav-link" data-view="attendance"><span class="nav-label">Attendance</span></a></li>
+<li><a href="#exams" class="nav-link" data-view="exams"><span class="nav-label">Exams</span></a></li>
+<li><a href="#grades" class="nav-link" data-view="grades"><span class="nav-label">Grades</span></a></li>
+<li><a href="#focus" class="nav-link" data-view="focus"><span class="nav-label">Focus</span></a></li>
+<li><a href="#notices" class="nav-link" data-view="notices"><span class="nav-label">Notices</span></a></li>
+<li><a href="#profile" class="nav-link" data-view="profile"><span class="nav-label">Profile</span></a></li>
+</ul>
+<button class="nav-btn theme-toggle" id="themeToggle" aria-label="Toggle theme"></button>
+</nav>
+
+<main class="page-wrap" id="pageWrap">
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<section id="view-overview" class="view">
+<div class="view-header"><h1>Overview</h1></div>
+<div class="grid stats" id="overviewStats"></div>
+<div class="card">
+<h2>Today's Schedule</h2>
+<div id="todaySchedule">Loading…</div>
+</div>
+<div class="card">
+<h2>To-Do Preview</h2>
+<div id="todoPreview">Loading…</div>
+</div>
+<div class="card alert-card" id="shortageAlert" style="display:none">
+<h2>Attendance Shortage</h2>
+<p id="shortageMsg"></p>
+</div>
+</section>
+
+<section id="view-timetable" class="view">
+<div class="view-header"><h1>Timetable</h1><button class="btn btn-blue" id="openAddClass">Add Class</button></div>
+<div class="card">
+<h2>Weekly Grid</h2>
+<div id="timetableGrid"></div>
+</div>
+<div class="modal" id="addClassModal" aria-hidden="true">
+<div class="modal-backdrop" id="addClassBackdrop"></div>
+<div class="modal-panel">
+<h3>Add Class</h3>
+<form id="addClassForm">
+<label>Subject <select name="subjectId" required></select></label>
+<label>Day <select name="day" required>
+<option value="mon">Monday</option>
+<option value="tue">Tuesday</option>
+<option value="wed">Wednesday</option>
+<option value="thu">Thursday</option>
+<option value="fri">Friday</option>
+<option value="sat">Saturday</option>
+<option value="sun">Sunday</option>
+</select></label>
+<label>Start <input type="time" name="start" required></label>
+<label>End <input type="time" name="end" required></label>
+<label>Room <input type="text" name="room" placeholder="Room"></label>
+<button type="submit" class="btn btn-blue">Add</button>
+<button type="button" class="btn btn-outline" id="closeAddClass">Cancel</button>
+</form>
+</div>
+</div>
+</section>
+
+<section id="view-attendance" class="view">
+<div class="view-header"><h1>Attendance</h1><button class="btn btn-blue" id="openMarkAttendance">Mark Attendance</button></div>
+<div id="attendanceGrid"></div>
+<div class="modal" id="markModal" aria-hidden="true">
+<div class="modal-backdrop" id="markBackdrop"></div>
+<div class="modal-panel">
+<h3>Mark Attendance</h3>
+<form id="markForm">
+<label>Subject <select name="subjectId" required></select></label>
+<label>Present <input type="number" name="present" min="0" value="0" required></label>
+<label>Absent <input type="number" name="absent" min="0" value="0" required></label>
+<button type="submit" class="btn btn-blue">Save</button>
+<button type="button" class="btn btn-outline" id="closeMark">Cancel</button>
+</form>
+</div>
+</div>
+</section>
+
+<section id="view-exams" class="view">
+<div class="view-header"><h1>Exams</h1><button class="btn btn-blue" id="openAddExam">Add Exam</button></div>
+<div class="card">
+<h2>Upcoming Exams</h2>
+<div id="examList"></div>
+</div>
+<div class="card">
+<h2>Countdown</h2>
+<div id="countdown" class="countdown">-- d -- h -- m -- s</div>
+</div>
+<div class="modal" id="addExamModal" aria-hidden="true">
+<div class="modal-backdrop" id="addExamBackdrop"></div>
+<div class="modal-panel">
+<h3>Add Exam</h3>
+<form id="addExamForm">
+<label>Subject <select name="subjectId" required></select></label>
+<label>Title <input type="text" name="title" required></label>
+<label>Date <input type="date" name="date" required></label>
+<label>Time <input type="time" name="time"></label>
+<button type="submit" class="btn btn-blue">Add</button>
+<button type="button" class="btn btn-outline" id="closeAddExam">Cancel</button>
+</form>
+</div>
+</div>
+</section>
+
+<section id="view-grades" class="view">
+<div class="view-header"><h1>Grades</h1><button class="btn btn-blue" id="openAddGrade">Add Grade</button></div>
+<div id="gradesSemesters"></div>
+<div class="card">
+<h2>CGPA</h2>
+<div id="cgpaDisplay">--</div>
+</div>
+<div class="modal" id="addGradeModal" aria-hidden="true">
+<div class="modal-backdrop" id="addGradeBackdrop"></div>
+<div class="modal-panel">
+<h3>Add Grade</h3>
+<form id="addGradeForm">
+<label>Subject <select name="subjectId" required></select></label>
+<label>Semester <select name="semester" required>
+<option value="1">Semester 1</option>
+<option value="2">Semester 2</option>
+<option value="3">Semester 3</option>
+<option value="4">Semester 4</option>
+<option value="5">Semester 5</option>
+<option value="6">Semester 6</option>
+</select></label>
+<label>Marks <input type="number" name="marks" min="0" required></label>
+<label>Max Marks <input type="number" name="maxMarks" min="1" value="100" required></label>
+<label>Credits <input type="number" name="credits" min="1" value="3" required></label>
+<button type="submit" class="btn btn-blue">Add</button>
+<button type="button" class="btn btn-outline" id="closeAddGrade">Cancel</button>
+</form>
+</div>
+</div>
+</section>
+
+<section id="view-focus" class="view">
+<div class="view-header"><h1>Focus</h1></div>
+<div class="card focus-card">
+<div class="pomodoro">
+<div class="ring-wrap">
+<svg class="ring" viewBox="0 0 100 100">
+<circle class="ring-bg" cx="50" cy="50" r="40"/>
+<circle class="ring-fg" id="ringFg" cx="50" cy="50" r="40"/>
+</svg>
+<div class="timer-display" id="timerDisplay">25:00</div>
+</div>
+<div class="pomo-controls">
+<button class="btn btn-blue" id="pomoStart">Start</button>
+<button class="btn btn-outline" id="pomoPause">Pause</button>
+<button class="btn btn-outline" id="pomoReset">Reset</button>
+</div>
+<div class="pomo-mode" id="pomoMode">Pomodoro</div>
+<div class="pomo-sessions">Sessions: <span id="pomoSessions">0</span></div>
+</div>
+</div>
+<div class="card">
+<h2>To-Do List</h2>
+<form id="todoForm" class="todo-form"><input type="text" name="text" placeholder="Add a task" required><button type="submit" class="btn btn-blue">Add</button></form>
+<ul id="todoList"></ul>
+</div>
+</section>
+
+<section id="view-notices" class="view">
+<div class="view-header"><h1>Notices</h1><button class="btn btn-blue" id="openAddNotice">Add Notice</button></div>
+<div id="noticesList"></div>
+<div class="modal" id="addNoticeModal" aria-hidden="true">
+<div class="modal-backdrop" id="addNoticeBackdrop"></div>
+<div class="modal-panel">
+<h3>Add Notice</h3>
+<form id="addNoticeForm">
+<label>Notice <textarea name="text" required></textarea></label>
+<label><input type="checkbox" name="pinned"> Pinned</label>
+<button type="submit" class="btn btn-blue">Add</button>
+<button type="button" class="btn btn-outline" id="closeAddNotice">Cancel</button>
+</form>
+</div>
+</div>
+</section>
+
+<section id="view-profile" class="view">
+<div class="view-header"><h1>Profile</h1></div>
+<div class="card">
+<h2>Profile</h2>
+<form id="profileForm">
+<label>Name <input type="text" name="name" required></label>
+<label>Course <input type="text" name="course" required></label>
+<label>Semester <input type="number" name="semester" min="1" value="1" required></label>
+<label>Theme <select name="theme"><option value="light">Light</option><option value="dark">Dark</option></select></label>
+<button type="submit" class="btn btn-blue">Save</button>
+</form>
+</div>
+<div class="card">
+<h2>Data</h2>
+<button class="btn btn-outline" id="loadDemo">Load Demo Data</button>
+<button class="btn btn-red" id="clearData">Clear All Data</button>
+</div>
+</section>
+
+</main>
+</header>
+<div class="bottom-tabs" id="bottomTabs"></div>
+<script src="app.js"></script>
+</body>
+</html>
